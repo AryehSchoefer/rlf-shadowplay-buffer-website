@@ -16,7 +16,7 @@ app.post('/savebuffer', (req, res) => {
 	res.json('Success')
 })
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
 	console.log(`Started listening on port ${PORT}`)
 })
