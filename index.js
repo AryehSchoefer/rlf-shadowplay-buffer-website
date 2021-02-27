@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config()
+  require('dotenv').config()
 }
 
 const express = require('express')
@@ -9,49 +9,59 @@ app.use(express.json())
 app.use(express.static('public'))
 
 app.post('/savebuffer', (req, res) => {
-	const { bufferValue } = req.body
+  const { bufferValue, stopRecording } = req.body
+  const data = { bufferValue, stopRecording }
 
-	saveBufferValue(bufferValue)
+  saveBufferValue(data)
 
-	res.json('Success')
+  res.json('Success')
 })
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-	console.log(`Started listening on port ${PORT}`)
+  console.log(`Started listening on port ${PORT}`)
 })
 
 const MONGO_URI = process.env.MONGO_URI
 const mongoose = require('mongoose')
 const Buffer = require('./models/models')
 
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+})
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error: '))
 db.once('open', () => {
-	console.log('DATABASE CONNECTED!')
+  console.log('DATABASE CONNECTED!')
 })
 
-async function saveBufferValue(bufferValue) {
-	// const buffer = new Buffer({
-	// 	buffer: bufferValue,
-	// })
+async function saveBufferValue(data) {
+  console.log(data)
 
-	// await buffer.save((err) => {
-	// 	if (err) return console.error(err)
-	// 	console.log(buffer)
-	// })
+  const req = await Buffer.findOneAndUpdate(
+    {},
+    {
+      buffer: data.bufferValue,
+      recording: !data.stopRecording,
+      date: Date.now(),
+    },
+    { new: true }
+  )
 
-	console.log(Date.now())
+  if (!req) {
+    const buffer = new Buffer({
+      buffer: data.bufferValue,
+      recording: !data.stopRecording,
+    })
 
-	const req = await Buffer.findOneAndUpdate(
-		{},
-		{
-			buffer: bufferValue,
-			date: Date.now(),
-		},
-		{ new: true }
-	)
-	console.log(req)
+    await buffer.save((err) => {
+      if (err) return console.error(err)
+      console.log(buffer)
+    })
+  }
+
+  console.log(req)
 }
