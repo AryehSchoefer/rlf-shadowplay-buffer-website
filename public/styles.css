@@ -131,6 +131,14 @@ footer {
     display: block;
 }
 
+@media only screen and (max-height: 660px) {
+    .dropdown-container {
+        display: flex;
+        justify-content: center;
+        padding: 0 0 12rem 0;
+    }
+}
+
 .stop-recording-container-container {
     display: flex;
     justify-content: center;
