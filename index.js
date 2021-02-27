@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const app = express()
+const path = require('path')
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -14,7 +15,19 @@ app.post('/savebuffer', (req, res) => {
 
   saveBufferValue(data)
 
-  res.json('Success')
+  res.json('/savebuffer Success')
+})
+
+app.post('/savecapture', (req, res) => {
+  const { captureValue } = req.body
+
+  saveCaptureValue(captureValue)
+
+  res.json('/savecapture Success')
+})
+
+app.get('/capture', (_, res) => {
+  res.sendFile(path.join(__dirname + '/public/capture.html'))
 })
 
 const PORT = process.env.PORT || 3000
@@ -24,7 +37,8 @@ app.listen(PORT, () => {
 
 const MONGO_URI = process.env.MONGO_URI
 const mongoose = require('mongoose')
-const Buffer = require('./models/models')
+const Buffer = require('./models/Buffer')
+const Capture = require('./models/Capture')
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -60,6 +74,33 @@ async function saveBufferValue(data) {
     await buffer.save((err) => {
       if (err) return console.error(err)
       console.log(buffer)
+    })
+  }
+
+  console.log(req)
+}
+
+async function saveCaptureValue(captureValue) {
+  console.log(captureValue)
+
+  const req = await Capture.findOneAndUpdate(
+    {},
+    {
+      btnPressed: captureValue,
+      date: Date.now(),
+    },
+    { new: true }
+  )
+
+  if (!req) {
+    const capture = new Capture({
+      model: 'Capture',
+      btnPressed: false,
+    })
+
+    await capture.save((err) => {
+      if (err) return console.error(err)
+      console.log(capture)
     })
   }
 

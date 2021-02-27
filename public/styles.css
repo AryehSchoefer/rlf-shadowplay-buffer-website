@@ -28,6 +28,17 @@ header > h1 {
     }
 }
 
+.navigate {
+    text-decoration: none;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    text-decoration: underline;
+}
+.navigate:hover {
+    color: #3498db;
+}
+
 .submit-container {
     display: flex;
     justify-content: center;

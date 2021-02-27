@@ -1,0 +1,29 @@
+.capture-container {
+    display: flex;
+    justify-content: center;
+    margin: 10rem 0 0 0;
+}
+
+#capture {
+    background: #ff7f50;
+    border: none;
+    border-radius: 3%;
+    color: white;
+    cursor: pointer;
+    padding: 2.5rem 3rem;
+    font-size: 2rem;
+}
+
+#capture:hover {
+    background: #f37345;
+}
+
+#capture:active {
+    background: #ee5e2a;
+}
+
+@media only screen and (max-width: 380px) {
+    #capture {
+        padding: 1rem 1.5rem;
+    }
+}
