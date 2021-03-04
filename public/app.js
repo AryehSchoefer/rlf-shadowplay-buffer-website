@@ -3,6 +3,8 @@ const dropdownBtn = document.querySelector('.dropbtn')
 const submitBtn = document.querySelector('.submit-buffer')
 const loadingElement = document.querySelector('#loading')
 const recordingCheckbox = document.querySelector('.stop-recording')
+const errorSection = document.querySelector('.error-container')
+const successSection = document.querySelector('.success-container')
 
 window.onclick = (event) => {
   if (!event.target.matches('.dropbtn')) {
@@ -16,7 +18,16 @@ window.onclick = (event) => {
   }
 }
 
+recordingCheckbox.addEventListener('click', () => {
+  if (recordingCheckbox.checked == true) {
+    submitBtn.textContent = 'Stop Recording'
+  } else {
+    submitBtn.textContent = 'Start Recording'
+  }
+})
+
 submitBtn.addEventListener('click', async () => {
+  errorSection.style.display = 'none'
   const bufferValue = dropdownBtn.textContent.split(' ')[0]
   const stopRecording = recordingCheckbox.checked
   const information = { bufferValue, stopRecording }
@@ -35,7 +46,13 @@ submitBtn.addEventListener('click', async () => {
     console.log(data)
 
     loadingElement.style.display = 'none'
-    submitBtn.style.display = 'block'
+    successSection.style.display = 'block'
+    setTimeout(() => {
+      successSection.style.display = 'none'
+      submitBtn.style.display = 'block'
+    }, 1000)
+  } else {
+    errorSection.style.display = 'block'
   }
 })
 

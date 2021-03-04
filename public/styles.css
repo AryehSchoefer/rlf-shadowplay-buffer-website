@@ -59,6 +59,7 @@ header > h1 {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    font-weight: bold;
 }
 
 .submit-buffer:active {
@@ -174,4 +175,28 @@ footer {
 input[type="checkbox"] {
     vertical-align: middle;
     transform: scale(1.5);
+}
+
+.error-container {
+    display: none;
+    text-align: center;
+    padding: 0 0 1rem 0;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.success-container {
+    display: none;
+    text-align: center;
+    padding: 1rem 0 0 0;
+}
+
+.success {
+    color: rgb(0, 179, 0);
+    font-weight: bold;
+    font-size: 1.25rem;
 }
